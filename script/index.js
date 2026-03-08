@@ -20,9 +20,12 @@ const displayLessons = (lessons) => {
 
         // 2-2- setting inner Html
         btnDiv.innerHTML = `
-        
+            <button class="btn btn-outline btn-primary">
+                <i class="fa-solid fa-book-open"></i> Lesson - ${lesson.level_no}
+            </button>
         `;
 
-        // 2-2- append into container
+        // 2-3- append into container
+        lessonsContainer.append(btnDiv);
     });
 }
