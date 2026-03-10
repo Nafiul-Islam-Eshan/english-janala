@@ -1,23 +1,48 @@
+
+// This function ---
+//    1. fetch the data of lesson buttons
 const loadLevel = () => {
-  const levelUrl = "https://openapi.programming-hero.com/api/levels/all";
-  fetch(levelUrl)
-    .then((res) => res.json())
-    .then((json) => displayLessons(json.data));
+  const levelUrl = "https://openapi.programming-hero.com/api/levels/all"; // url of btn datad
+  fetch(levelUrl) // fetch started
+    .then((res) => res.json()) // making the resonse in json format
+    .then((json) => displayLessons(json.data)); // value of data key inside the json format passed to the displayLessons function
 };
 
+
+const removeActive = () => {
+  const levelBtns = document.querySelectorAll(".level-btns") // get all lesson buttons when any lesson btn is clicked
+  levelBtns.forEach(levelBtn => {
+    levelBtn.classList.remove("active");
+  });
+}
+
+
+// This fuction ---
+//    1. fetches json data of all words in each lesson
+//    2.takes value of lesson no. from the clicked btn. Onclick handler in 96 line
 const loadLevelWord = (id) => {
-  const wordsUrl = `https://openapi.programming-hero.com/api/level/${id}`;
-  fetch(wordsUrl)
-    .then((res) => res.json())
-    .then((levelWords) => displayLevelWords(levelWords.data));
+  const wordsUrl = `https://openapi.programming-hero.com/api/level/${id}`; // url of lesson words 
+  fetch(wordsUrl) // started fetching 
+    .then((res) => res.json()) // convert the response into json 
+    .then((levelWords) => {  // while every lesson words fetched, I will do something
+      removeActive(); // will call the removeActive function
+      const clickedBtn = document.getElementById(`lesson-btn-${id}`); // will get the selected lesson btn
+      clickedBtn.classList.add("active"); // this selected btn will get some style
+      
+      displayLevelWords(levelWords.data); //send the value of data key inside fetched json to displayLevelWords function
+    });
 };
 
+
+// This function ---
+//    1. will receive an array. This array is of object what containes keys id,level,word,meaning,pronunciation
+//    2. Display these each object in a card in the UI
 const displayLevelWords = (words) => {
   // 1- get the container and make empty
   const wordContainer = document.getElementById("wordContainer");
   wordContainer.innerHTML = "";
 
-  if (words.length === 0){
+  if (words.length === 0){  // if there is no word to show 
     wordContainer.innerHTML = `
         <div class="col-span-full text-center space-y-3 py-6 md:py-10 font-bangla">
             <img class="mx-auto" src="./assets/alert-error.png" alt="">
@@ -57,6 +82,10 @@ const displayLevelWords = (words) => {
   });
 };
 
+
+// This fuction ---
+//    1. Takes the value of data key inside json formate, what are lesson buttons data
+//    2. display lesson buttons in UI
 const displayLessons = (lessons) => {
   // 1- get the container and make empty
   const lessonsContainer = document.querySelector("#lessonsContainer"); // getting the parent container
@@ -69,14 +98,14 @@ const displayLessons = (lessons) => {
 
     // 2-2- setting inner Html
     btnDiv.innerHTML = `
-        <button onclick = "loadLevelWord(${lesson.level_no})" class="btn btn-outline btn-primary">
+        <button id="lesson-btn-${lesson.level_no}" onclick = "loadLevelWord(${lesson.level_no})" class="btn btn-outline btn-primary level-btns">
             <i class="fa-solid fa-book-open"></i> Lesson - ${lesson.level_no}
         </button>
-        `;
+        `; // onclick triggers loadLevelWord function
 
     // 2-3- append into container
     lessonsContainer.append(btnDiv);
   });
 };
 
-loadLevel();
+loadLevel(); // calling loadLevel fuunction
