@@ -1,4 +1,12 @@
 
+const createElement = (arr) => { // receives an array
+  const htmlElements = arr.map( el => `<span class="btn opacity-70">${el}</span>`);  // creates a new array 
+  return htmlElements.join(" "); // converts the array into string and returns
+}
+const arr = ["my", "name", "is", "eshan"]
+createElement(arr);
+
+
 // This function ---
 //    1. fetch the data of lesson buttons
 const loadLevel = () => {
@@ -47,7 +55,45 @@ const loadWordDetail = async (id) => { // id = unique id of word details
 
 const displayWordDetail = (word) => {
   const wordDetailContainer = document.getElementById("word-detail-container");
-  wordDetailContainer.innerHTML = `<p>Yes Iam a modal given by js</p>`
+  
+//   {
+//     "word": "Eager",
+//     "meaning": "আগ্রহী",
+//     "pronunciation": "ইগার",
+//     "level": 1,
+//     "sentence": "The kids were eager to open their gifts.",
+//     "points": 1,
+//     "partsOfSpeech": "adjective",
+//     "synonyms": [
+//         "enthusiastic",
+//         "excited",
+//         "keen"
+//     ],
+//     "id": 5
+//    }
+
+  wordDetailContainer.innerHTML = `
+            <h2 class="font-bold text-2xl">${word.word} ( <i class="fa-solid fa-microphone-lines"></i>  : ${word.pronunciation})</h2>
+
+            <div class="">
+                <h2 class="font-bold text-lg">Meaning</h2>
+                <p class="opacity-70">${word.meaning}</p>
+            </div>
+
+            <div class="">
+                <h2 class="font-bold text-lg">Example</h2>
+                <p class="opacity-70">${word.sentence}</p>
+            </div>
+
+            <div class="">
+                <h2 class="font-bold text-lg font-bangla">সমার্থক শব্দ গুলো</h2>
+                <div class="">
+                  ${createElement(word.synonyms)}
+                </div>               
+            </div>
+
+  `;
+
   document.getElementById("my_modal_5").showModal()
 }
 
