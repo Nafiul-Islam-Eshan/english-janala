@@ -20,7 +20,7 @@ const removeActive = () => {
 // This fuction ---
 //    1. fetches json data of all words in each lesson
 //    2.takes value of lesson no. from the clicked btn. Onclick handler in 96 line
-const loadLevelWord = (id) => {
+const loadLevelWord = (id) => { // id = unique id of each level
   const wordsUrl = `https://openapi.programming-hero.com/api/level/${id}`; // url of lesson words 
   fetch(wordsUrl) // started fetching 
     .then((res) => res.json()) // convert the response into json 
@@ -32,6 +32,25 @@ const loadLevelWord = (id) => {
       displayLevelWords(levelWords.data); //send the value of data key inside fetched json to displayLevelWords function
     });
 };
+
+
+// This function ---
+//    1. takes an id as a parameter
+//    2. fetches word details of that specific id
+const loadWordDetail = async (id) => { // id = unique id of word details
+  const url = `https://openapi.programming-hero.com/api/word/${id}`; // url of word details
+  const res = await fetch(url); // fetching and getting respond
+  const detail = await res.json();  // converting the respond to json
+  displayWordDetail(detail.data); // detail = object of word detail
+}
+
+
+const displayWordDetail = (word) => {
+  const wordDetailContainer = document.getElementById("word-detail-container");
+  wordDetailContainer.innerHTML = `<p>Yes Iam a modal given by js</p>`
+  document.getElementById("my_modal_5").showModal()
+}
+
 
 
 // This function ---
@@ -67,12 +86,19 @@ const displayLevelWords = (words) => {
 
     card.innerHTML = `
         <div class=" rounded-sm bg-white text-center p-3 space-y-4 shadow-xl">
-            <p class="font-bold text-2xl "> ${word.word ? word.word : "Word not found"} </p>
+
+            <p class="font-bold text-2xl "> ${word.word ? word.word : "Word not found"} </p> 
+
             <p class="font-semibold ">Meaning /Pronounciation</p>
+
             <div class="font-bangla font-bold text-xl">" ${word.meaning? word.meaning : "Meaning not found"} / ${word.pronunciation? word.pronunciation : "Pronunciation not found"} "</div>
+
             <div class="flex justify-between items-center mt-1">
-                <button class="btn bg-[#1A91FF10] hover:bg-[#1A91FF70]"><i class="fa-solid fa-circle-info"></i></button>
+            
+                <button onclick="loadWordDetail(${word.id})" class="btn bg-[#1A91FF10] hover:bg-[#1A91FF70]"><i class="fa-solid fa-circle-info"></i></button>
+                
                 <button class="btn bg-[#1A91FF10] hover:bg-[#1A91FF70]"><i class="fa-solid fa-volume-high"></i></button>
+
             </div>
         </div>
         `;
