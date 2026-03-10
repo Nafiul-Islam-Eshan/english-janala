@@ -99,7 +99,7 @@ const displayWordDetail = (word) => {
             <div class="">
                 <h2 class="font-bold text-lg font-bangla">সমার্থক শব্দ গুলো</h2>
                 <div class="">
-                  ${createElement(word.synonyms)}
+                  ${createElement(word.synonyms ? word.synonyms : "No synonyms are added🙁")}
                 </div>               
             </div>
 
@@ -195,3 +195,19 @@ const displayLessons = (lessons) => {
 };
 
 loadLevel(); // calling loadLevel fuunction
+
+
+document.getElementById("searchBtn").addEventListener("click", (event) => {
+  removeActive()
+  const inputValue = document.getElementById("searchInput").value.trim().toLowerCase();
+  console.log(inputValue);
+
+  fetch("https://openapi.programming-hero.com/api/words/all")
+  .then(res => res.json())
+  .then(data => {
+    const allWords = data.data;
+    const filterWords = allWords.filter( word => word.word.toLowerCase().includes(inputValue));
+    displayLevelWords(filterWords);
+  })
+})
+
