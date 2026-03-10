@@ -3,9 +3,19 @@ const createElement = (arr) => { // receives an array
   const htmlElements = arr.map( el => `<span class="btn opacity-70">${el}</span>`);  // creates a new array 
   return htmlElements.join(" "); // converts the array into string and returns
 }
-const arr = ["my", "name", "is", "eshan"]
-createElement(arr);
 
+
+const spinManager = (status) => {
+  if(status === true){
+    document.getElementById("spinner").classList.remove("hidden");
+    document.getElementById("spinner").classList.add("my-20");
+    document.getElementById("wordContainer").classList.add("hidden");
+  }
+  else{
+    document.getElementById("wordContainer").classList.remove("hidden");
+    document.getElementById("spinner").classList.add("hidden");
+  }
+}
 
 // This function ---
 //    1. fetch the data of lesson buttons
@@ -29,6 +39,7 @@ const removeActive = () => {
 //    1. fetches json data of all words in each lesson
 //    2.takes value of lesson no. from the clicked btn. Onclick handler in 96 line
 const loadLevelWord = (id) => { // id = unique id of each level
+  spinManager(true);
   const wordsUrl = `https://openapi.programming-hero.com/api/level/${id}`; // url of lesson words 
   fetch(wordsUrl) // started fetching 
     .then((res) => res.json()) // convert the response into json 
@@ -108,6 +119,7 @@ const displayLevelWords = (words) => {
   wordContainer.innerHTML = "";
 
   if (words.length === 0){  // if there is no word to show 
+    spinManager(false);
     wordContainer.innerHTML = `
         <div class="col-span-full text-center space-y-3 py-6 md:py-10 font-bangla">
             <img class="mx-auto" src="./assets/alert-error.png" alt="">
@@ -115,6 +127,7 @@ const displayLevelWords = (words) => {
             <h2 class="text-2xl md:text-3xl font-">নেক্সট Lesson এ যান</h2>
         </div>
     `
+    return;
   }
 
   // 2- Get into every words, then-
@@ -152,6 +165,7 @@ const displayLevelWords = (words) => {
     // 2-3- appending into container
     wordContainer.append(card);
   });
+  spinManager(false);
 };
 
 
